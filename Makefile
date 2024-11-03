@@ -1,4 +1,4 @@
-clox:
+clox: clox.c
 	gcc -g -o clox *.c
 
 clean:
