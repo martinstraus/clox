@@ -19,7 +19,7 @@ void initScanner(const char* source) {
 }
 
 static bool isAtEnd() {
-    return *scanner.current == '\0';
+    return scanner.current[0] == '\0';
 }
 
 static Token makeToken(TokenType type) {
@@ -181,6 +181,7 @@ Token scanToken() {
         case ';': return makeToken(TOKEN_SEMICOLON);
         case ',': return makeToken(TOKEN_COMMA);
         case '.': return makeToken(TOKEN_DOT);
+        case '+': return makeToken(TOKEN_PLUS);
         case '-': return makeToken(TOKEN_MINUS);
         case '/': return makeToken(TOKEN_SLASH);
         case '*': return makeToken(TOKEN_STAR);
