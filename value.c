@@ -2,6 +2,7 @@
 
 #include "memory.h"
 #include "value.h"
+#include "object.h"
 
 bool valuesEqual(Value a, Value b) {
     if (a.type != b.type) return false;
@@ -44,6 +45,9 @@ void printValue(Value value) {
             break;
         case VAL_NUMBER:
             printf("%g", AS_NUMBER(value));
+            break;
+        case VAL_OBJ:
+            printObject(value);
             break;
     }
 }
