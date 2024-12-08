@@ -29,6 +29,7 @@ static void runtimeError(const char* format, ...) {
 
 void initVM() {
     resetStack();
+    vm.objects = NULL;
 }
 
 Value pop() {
@@ -159,6 +160,6 @@ void push(Value value) {
     vm.stackTop++;
 }
 
-
 void freeVM() {
+    freeObjects();
 }
