@@ -309,6 +309,7 @@ static void parsePrecedence(Precedence precedence) {
 
 
 static uint8_t parseVariable(const char* errorMessage) {
+    consume(TOKEN_IDENTIFIER, errorMessage);
     declareVariable();
     if (current->scopeDepth > 0) return 0;
     return identifierConstant(&parser.previous);
