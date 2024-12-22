@@ -207,6 +207,18 @@ static uint8_t identifierConstant(Token* name) {
     return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
 }
 
+static void addLocal(Token name) {
+    Local* local = &current->locals[current->localCount++];
+    local->name = name;
+    local->depth = current->scopeDepth;
+}
+
+static void declareVariable() {
+    if (current->scopeDepth == 0) return;
+    Token* name = &parser.previous;
+    addLocal(*name);
+}
+
 static void namedVariable(Token name, bool canAssign) {
     uint8_t arg = identifierConstant(&name);
     if (canAssign && match(TOKEN_EQUAL)) {
@@ -297,11 +309,15 @@ static void parsePrecedence(Precedence precedence) {
 
 
 static uint8_t parseVariable(const char* errorMessage) {
-    consume(TOKEN_IDENTIFIER, errorMessage);
+    declareVariable();
+    if (current->scopeDepth > 0) return 0;
     return identifierConstant(&parser.previous);
 }
 
 static void defineVariable(uint8_t global) {
+    if (current->scopeDepth > 0) {
+        return;
+    }
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
