@@ -1,5 +1,5 @@
-fun a(a, b) {
-    print a+b;
+fun f(x) {
+    return x+1;
 }
 
-print a;
+print f(1);
