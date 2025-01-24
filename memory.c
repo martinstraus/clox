@@ -41,7 +41,7 @@ void markValue(Value value) {
     for (Value* slot = vm.stack; slot < vm.stackTop; slot++) {
         markValue(*slot);
     }
-    //markTable(&vm.globals);
+    markTable(&vm.globals);
 }
 
 void collectGarbage() {
