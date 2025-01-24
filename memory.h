@@ -16,6 +16,14 @@
 
 void* reallocate(void* pointer, size_t oldsize, size_t newsize);
 
+void markObject(Obj* object);
+
+void markValue(Value value);
+
+void markRoots();
+
+void collectGarbage();
+
 void freeObjects(); 
 
 #endif
