@@ -160,7 +160,7 @@ static InterpretResult run() {
     #define READ_BYTE() (*frame->ip++)
     #define READ_CONSTANT() (frame->closure->function->chunk.constants.values[READ_BYTE()])
     #define READ_SHORT() (frame->ip += 2, (uint16_t)((frame->ip[-2] << 8) | frame->ip[-1]))
-    #define READ_STRING() AS_STRING(READ_CONSTANT());
+    #define READ_STRING() AS_STRING(READ_CONSTANT())
     // This do / while for the macro is bullshit.
     #define BINARY_OP(valueType, op) \
     do { \
@@ -336,6 +336,9 @@ static InterpretResult run() {
                 frame = &vm.frames[vm.frameCount -1];
                 break;
             }
+            case OP_CLASS:
+                push(OBJ_VAL(newClass(READ_STRING())));
+                break;
         }
     }
     #undef BINARY_OP
