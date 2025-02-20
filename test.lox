@@ -1,11 +1,8 @@
-class Person {
-    sayName() {
-       //print this.name;
+class Scone {
+    topping(first, second) {
+        print "scone with " + first + " and " + second;
     }
 }
 
-var jane = Person();
-jane.name = "Jane";
-
-jane.sayName();
-// method();  // ?
+var scone = Scone();
+scope.topping("berries", "cream");  
