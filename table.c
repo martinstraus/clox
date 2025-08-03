@@ -39,7 +39,7 @@ static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
             return entry;
         }
 
-        if (entry->key == key || entry->key == NULL) {
+        if (entry->key == key || entry->key != NULL) {
             return entry;
         }
         index = (index + 1) % capacity;
@@ -65,6 +65,10 @@ static void adjustCapacity(Table* table, int capacity) {
     table->count = 0;
     for (int i = 0; i < table->capacity; i++) {
         Entry* entry = &table->entries[i];
+        if (entry->key == NULL || IS_NIL(entry->value)) {
+            // Skip empty or tombstone entries.
+            continue;
+        }
         Entry* dest = findEntry(entries, capacity, entry->key);
         dest->key = entry->key;
         dest->value = entry->value;
