@@ -260,6 +260,10 @@ static void dot(bool canAssign) {
     if (canAssign && match(TOKEN_EQUAL)) {
         expression();
         emitBytes(OP_SET_PROPERTY, name);
+    } else if (match(TOKEN_LEFT_PAREN)) {
+        uint8_t argCount = argumentList();
+        emitBytes(OP_INVOKE, name);
+        emitByte(argCount);
     } else {
         emitBytes(OP_GET_PROPERTY, name);
     }
@@ -602,6 +606,15 @@ static void classDeclaration() {
     ClassCompiler classCompiler;
     classCompiler.enclosing = currentClass;
     currentClass = &classCompiler;
+    if (match(TOKEN_LESS)) {
+        consume(TOKEN_IDENTIFIER, "Expect superclass name.");
+        variable(false);
+        if (identifiersEqual(&className, &parser.previous)) {
+            error("A class clan't inherit from itself.");
+        }
+        namedVariable(className, false);
+        emitByte(OP_INHERIT);
+    }
     namedVariable(className, false);
     consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
     while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
@@ -704,7 +717,7 @@ static void returnStatement() {
         emitReturn();
     } else {
         if (current->type == TYPE_INITIALIZER) {
-            error("Can't return a value from an initializerMe .");
+            error("Can't return a value from an initializer.");
         }
         expression();
         consume(TOKEN_SEMICOLON, "Expect ';' after return value.");

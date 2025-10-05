@@ -39,9 +39,10 @@ static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
             return entry;
         }
 
-        if (entry->key == key || entry->key != NULL) {
+        // Ok... I'm commenting this because the interpreter otherwise failed with inheritance.
+        /*if (entry->key == key || entry->key != NULL) {
             return entry;
-        }
+        }*/
         index = (index + 1) % capacity;
     }
 }
@@ -62,21 +63,23 @@ static void adjustCapacity(Table* table, int capacity) {
         entries[i].key = NULL;
         entries[i].value = NIL_VAL();
     }
-    table->count = 0;
+
+    // Keep track of actual count
+    int count = 0;
     for (int i = 0; i < table->capacity; i++) {
         Entry* entry = &table->entries[i];
-        if (entry->key == NULL || IS_NIL(entry->value)) {
-            // Skip empty or tombstone entries.
-            continue;
-        }
+        if (entry->key == NULL) continue;
+        
         Entry* dest = findEntry(entries, capacity, entry->key);
         dest->key = entry->key;
         dest->value = entry->value;
-        table->count++;
+        count++;
     }
+
     FREE_ARRAY(Entry, table->entries, table->capacity);
     table->entries = entries;
     table->capacity = capacity;
+    table->count = count;  // Set the correct count once
 }
 
 bool tableSet(Table* table, ObjString* key, Value value) {

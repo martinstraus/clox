@@ -1,4 +1,10 @@
-class CoffeeMaker {
+class Appliance {
+    plug() {
+        print "Plugged...";
+    }
+}
+
+class CoffeeMaker < Appliance {
     init(coffee) {
         this.coffee = coffee;
     }
@@ -10,4 +16,5 @@ class CoffeeMaker {
 }
 
 var maker = CoffeeMaker("colombia");
+maker.plug();
 maker.brew();
