@@ -1,5 +1,5 @@
 clox: *.c *.h
-	gcc -g -o clox *.c
+	gcc -fprofile-generate -O2 -g -o clox *.c
 
 clean:
 	rm ./clox
